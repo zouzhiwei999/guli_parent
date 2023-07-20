@@ -30,6 +30,7 @@ import java.util.List;
 @Api(tags = "teacher模块")
 @RestController
 @RequestMapping("/edu/teacher")
+@CrossOrigin
 public class TeacherController {
 
     @Autowired
@@ -80,14 +81,18 @@ public class TeacherController {
     public R pageTeacherConditionol(
             @PathVariable Long current,
             @PathVariable Long size,
-            @ApiParam(name = "teacherVO",required = false, value = "用来查询teacher的条件")@RequestBody(required = false) TeacherVO teacherVO
+            @ApiParam(name = "teacherVO",required = false, value = "用来查询teacher的条件")@RequestBody(required = false)TeacherVO teacherVO
             ) {
+
+        //创建Page
+        Page<Teacher> teacherPage = new Page<>(current, size);
+        //构建条件
+        QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
+
         String name = teacherVO.getName();
         Integer level = teacherVO.getLevel();
         Date begin = teacherVO.getBegin();
         Date end = teacherVO.getEnd();
-
-        QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
 
         if (!StringUtils.isEmpty(name)) {
             wrapper.like("name", name);
@@ -102,7 +107,14 @@ public class TeacherController {
             wrapper.le("gmt_modified", end);
         }
 
-        Page<Teacher> teacherPage = new Page<>(current, size);
+//        try {
+//            int i = 10/0;
+//        } catch (Exception e) {
+//            throw new GuliException(10086, "你触发了异常，抛出自定义异常");
+//        }
+
+        wrapper.orderByDesc("gmt_modified");
+
         IPage<Teacher> page = teacherService.page(teacherPage, wrapper);
 
         List<Teacher> records = page.getRecords();
@@ -125,9 +137,8 @@ public class TeacherController {
 
     //修改teacher第二步,提交一个teacher
     @ApiOperation("修改某一个teacher")
-    @PutMapping("/{id}")
+    @PutMapping("/update")
     public R updataTeacher(
-            @PathVariable String id,
             @RequestBody Teacher teacher
     ) {
         if (teacherService.updateById(teacher)) {
@@ -139,9 +150,10 @@ public class TeacherController {
 
     //新增一个teacher
     @ApiOperation("保存一个teacher")
-    @PutMapping("/save")
+    @PostMapping("/save")
     public R save(
-            @ApiParam(name = "teacher", required = false, value = "新增的teacher")@RequestBody Teacher teacher
+            @ApiParam(name = "teacher", required = false, value = "新增的teacher")
+            @RequestBody Teacher teacher
     ){
         boolean save = teacherService.save(teacher);
         if (save) {

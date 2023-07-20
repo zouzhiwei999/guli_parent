@@ -28,7 +28,7 @@ public class SwaggerConfig {
      return new Docket(DocumentationType.SWAGGER_2)
      .groupName("zzw")
      .enable(true)
-     .apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.basePackage("com.atguigu.edu.controller")).build();
+     .apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.basePackage("com.atguigu")).build();
     }
 
     public ApiInfo apiInfo() {
