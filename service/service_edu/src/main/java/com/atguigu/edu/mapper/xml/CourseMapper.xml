@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.edu.mapper.CourseMapper">
+
+    <select id="getCoursePublishVo" resultType="com.atguigu.edu.entity.vo.CoursePublishVo">
+        SELECT es.`id`,es.`title`,es.`cover`,es.`lesson_num` ,esu1.`title` AS subjectLevelOne,esu2.`title` AS subjectLevelTwo,et.`name` teacherName,es.`price`
+        FROM edu_course es
+                 JOIN edu_teacher et ON es.`teacher_id` = et.id
+                 JOIN edu_subject esu1 ON es.`subject_parent_id` = esu1.`id`
+                 JOIN edu_subject esu2 ON es.`subject_id` = esu2.`id`
+        WHERE es.`id` =  #{courseId}
+    </select>
+</mapper>

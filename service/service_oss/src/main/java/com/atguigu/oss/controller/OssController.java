@@ -5,6 +5,8 @@ import com.atguigu.oss.service.impl.OssServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/oss/fileUpload")
 @CrossOrigin
+@Slf4j
 public class OssController {
 
     @Autowired
@@ -29,7 +32,8 @@ public class OssController {
 
     @ApiOperation("上传功能")
     @PostMapping()
-    public R uploadOssFile(@ApiParam(name="multipartFile" ,value = "多段文件", required = true) MultipartFile file) {
+    public R uploadOssFile(@ApiParam(name="file" ,value = "多段文件", required = true) MultipartFile file) {
+        log.info(new DateTime().toString("yyyy/MM/dd"));
         String url = ossService.uploadAvatar(file);
         return R.ok().data("url", url);
     }
