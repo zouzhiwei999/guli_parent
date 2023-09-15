@@ -5,6 +5,7 @@ import com.atguigu.edu.mapper.CourseDescriptionMapper;
 import com.atguigu.edu.service.CourseDescriptionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -17,4 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseDescriptionServiceImpl extends ServiceImpl<CourseDescriptionMapper, CourseDescription> implements CourseDescriptionService {
 
+    @Override
+    public void deleteDescription(String id) {
+        if (!StringUtils.isEmpty(id)){
+            baseMapper.deleteById(id);
+        }
+    }
 }

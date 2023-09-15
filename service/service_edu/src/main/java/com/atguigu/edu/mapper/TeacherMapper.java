@@ -1,6 +1,8 @@
 package com.atguigu.edu.mapper;
 
+import com.atguigu.edu.entity.Course;
 import com.atguigu.edu.entity.Teacher;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

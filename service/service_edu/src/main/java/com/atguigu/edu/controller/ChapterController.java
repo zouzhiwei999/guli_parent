@@ -58,7 +58,7 @@ public class ChapterController {
         return R.ok().data("chapter",chapter);
     }
 
-    @ApiOperation("删除大章节")
+    @ApiOperation("删除大章节，接收chapter的ID")
     @DeleteMapping("{id}")
     public R deleteChapter(@PathVariable("id")String id){
         service.deleteChapter(id);

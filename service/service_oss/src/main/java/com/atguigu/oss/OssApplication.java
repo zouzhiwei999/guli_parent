@@ -3,6 +3,7 @@ package com.atguigu.oss;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @description: TODO
  * @date 2023/7/17 22:02
  */
+@EnableDiscoveryClient
 @ComponentScan(basePackages = {"com.atguigu"})
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class OssApplication {

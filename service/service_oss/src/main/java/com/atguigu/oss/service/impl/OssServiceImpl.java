@@ -3,22 +3,18 @@ package com.atguigu.oss.service.impl;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.common.auth.CredentialsProviderFactory;
-import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
 import com.aliyun.oss.common.comm.ResponseMessage;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.atguigu.oss.service.OssService;
 import com.atguigu.oss.utils.ConstantPropertiesUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -28,6 +24,7 @@ import java.util.UUID;
  * @date 2023/7/18 1:00
  */
 @Service
+@Slf4j
 public class OssServiceImpl implements OssService {
 
     //上传文件流(头像)
@@ -67,17 +64,12 @@ public class OssServiceImpl implements OssService {
             // 创建PutObjectRequest对象。
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, inputStream);
             // 创建PutObject请求。
-            PutObjectResult result = ossClient.putObject(putObjectRequest);
+            ossClient.putObject(putObjectRequest);
 
-            //获取返回结果
-            ResponseMessage response = result.getResponse();
 
-            if (response == null) {
-                String url = "https://" + bucketName + "." + endpoint + "/" + objectName;
-                return url;
-            }
-
-            return null;
+            log.info("https://" + bucketName + "." + endpoint + "/" + objectName);
+            String url = "https://" + bucketName + "." + endpoint + "/" + objectName;
+            return url;
 
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "

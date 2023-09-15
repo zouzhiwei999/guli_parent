@@ -1,5 +1,6 @@
 package com.atguigu.edu.service.impl;
 
+import com.atguigu.edu.client.VodClient;
 import com.atguigu.edu.entity.Chapter;
 import com.atguigu.edu.entity.Video;
 import com.atguigu.edu.entity.vo.chapter.ChapterVo;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,10 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
     @Autowired
     private VideoMapper mapper;
 
-    //获取List<ChapterVo>
+    @Autowired
+    private VodClient vodClient;
+
+    //获取List<ChapterVo>,章节和小节
     @Override
     public List<ChapterVo> getChapterVoList(String id) {
 
@@ -92,10 +97,33 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
         }
     }
 
+    //删除chapter ,video ,阿里云视频 接收chapter的ID
     @Override
     public void deleteChapter(String id) {
 
-        log.info("===========" + id);
+        log.info("Chapter的ID:" +  id);
+        //1.删除阿里云的视频
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+        videoQueryWrapper.eq("chapter_id", id);
+        List<Video> videos = mapper.selectList(videoQueryWrapper);
+
+        List<String> videoSourceIdList = new ArrayList<>();
+        //一个chappter有多个阿里云视频
+        for (Video video : videos) {
+            log.info("video:" +  video);
+
+            String videoSourceId = video.getVideoSourceId();
+            if (!StringUtils.isEmpty(videoSourceId)){
+                videoSourceIdList.add(videoSourceId);
+            }
+        }
+
+        if (videoSourceIdList.size()>0){
+            vodClient.deleteBatch(videoSourceIdList);
+        }
+
+        //2.删除小节
+
         QueryWrapper<Video> wrapper = new QueryWrapper<>();
         wrapper.eq("chapter_id", id);
         Integer integer = mapper.selectCount(wrapper);
@@ -108,6 +136,7 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
         }
 
 
+        //3.删除chapter
         QueryWrapper<Chapter> wrapper1 = new QueryWrapper<>();
         wrapper1.eq("id", id);
         int delete1 = baseMapper.delete(wrapper1);
@@ -121,5 +150,14 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
     public Chapter getChapter(String id) {
         Chapter chapter = baseMapper.selectById(id);
         return chapter;
+    }
+
+    @Override
+    public void deleteChapterByCourseId(String id) {
+        if (!StringUtils.isEmpty(id)){
+            QueryWrapper<Chapter> wrapper = new QueryWrapper<>();
+            wrapper.eq("course_id", id);
+            int delete = baseMapper.delete(wrapper);
+        }
     }
 }

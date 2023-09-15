@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -32,9 +29,11 @@ public class OssController {
 
     @ApiOperation("上传功能")
     @PostMapping()
-    public R uploadOssFile(@ApiParam(name="file" ,value = "多段文件", required = true) MultipartFile file) {
+    public R uploadOssFile(MultipartFile file) {
         log.info(new DateTime().toString("yyyy/MM/dd"));
         String url = ossService.uploadAvatar(file);
+        log.info(url);
+
         return R.ok().data("url", url);
     }
 }

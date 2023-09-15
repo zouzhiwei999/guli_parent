@@ -1,21 +1,21 @@
-package com.atguigu.edu;
+package com.atguigu.vod;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
 import org.springframework.context.annotation.ComponentScan;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author AOA
  * @version 1.0
  * @description: TODO
- * @date 2023/5/26 2:33
+ * @date 2023/8/1 20:49
  */
 @ComponentScan(basePackages = {"com.atguigu"})
-@SpringBootApplication
-public class eduSpringApplication {
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+public class VodApplication {
     public static void main(String[] args) {
-        SpringApplication.run(eduSpringApplication.class, args);
+        SpringApplication.run(VodApplication.class, args);
     }
 }
-
