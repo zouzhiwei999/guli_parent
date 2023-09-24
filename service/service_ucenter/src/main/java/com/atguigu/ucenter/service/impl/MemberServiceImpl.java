@@ -31,6 +31,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
+    @Autowired
+    private MemberMapper memberMapper;
+
     @Override
     public String login(Member member) {
 
@@ -118,5 +121,15 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         Member member = baseMapper.selectOne(wrapper);
 
         return member;
+    }
+
+    //得到该日期注册人数
+    @Override
+    public Integer countRegister(String day) {
+        Integer num = memberMapper.countRegister(day);
+        if (num < 0) {
+            throw new GuliException(20001, "数据库中没有该日期的注册人数统计");
+        }
+        return num;
     }
 }

@@ -19,4 +19,7 @@ public interface MemberService extends IService<Member> {
     void register(RegisterVo registerVo);
 
     Member selectMemberByOpenid(String openid);
+
+    Integer countRegister(String day);
+
 }

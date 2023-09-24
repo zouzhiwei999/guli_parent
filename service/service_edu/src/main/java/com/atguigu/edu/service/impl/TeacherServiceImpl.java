@@ -50,7 +50,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
 
         IPage<Teacher> teacherIPage = baseMapper.selectPage(teacherPage, wrapper);
 
-        if (teacherIPage == null){
+        if (teacherPage == null){
             throw new GuliException(20001, "查询教师列表失败");
         }
 

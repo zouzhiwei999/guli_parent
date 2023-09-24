@@ -1,7 +1,10 @@
 package com.atguigu.ucenter.service;
 
 import com.atguigu.ucenter.entity.EduComment;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface EduCommentService extends IService<EduComment> {
 
+    Map getCommentPage(Page<EduComment> objectPage,String courseId);
+
+    void addComment(EduComment eduComment);
 }

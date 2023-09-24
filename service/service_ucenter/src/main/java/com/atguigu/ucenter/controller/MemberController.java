@@ -65,5 +65,14 @@ public class MemberController {
         log.info("member: " + memberVo);
         return R.ok().data("userInfo",memberVo);
     }
+
+    @ApiOperation("传送日期，得到该日期用户注册人数")
+    @GetMapping("countRegister/{day}")
+    public R countRegister(@PathVariable("day")String day){
+        log.info("=============ucenter被调用=============");
+        Integer num = memberService.countRegister(day);
+        return R.ok().data("num", num);
+    }
+
 }
 
